@@ -5,6 +5,7 @@
 	credentials</strong>
   </p>
   <p>
+
 ![CI (Linux)](<https://github.com/realaravinth/argon2-creds/workflows/CI%20(Linux)/badge.svg>)
 [![Dependency Status](https://deps.rs/crate/argon2-creds/3.3.2/status.svg)](https://deps.rs/crate/argon2-creds/3.3.2)
 <br />
@@ -12,7 +13,7 @@
 
 </div>
 
-## Featuers
+## Features
 - [x] PRECIS Framework [UsernameCaseMapped](https://tools.ietf.org/html/rfc8265#page-7)
 - [x] Password hashing and validation
 - [x] Filters for words that might cause ambiguity. See 
