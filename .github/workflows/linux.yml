@@ -63,3 +63,18 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           file: cobertura.xml
+
+      - name: generate documentation
+        if: matrix.version == 'stable' && (github.repository == 'realaravinth/damn-vuln-blockchain')
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+          args: --no-deps --workspace --all-features
+
+      - name: Deploy to GitHub Pages
+        if: matrix.version == 'stable' && (github.repository == 'realaravinth/damn-vuln-blockchain')
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: target/doc

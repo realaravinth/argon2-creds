@@ -3,24 +3,64 @@
 //!
 //! ## Example
 //!
+//! 1. The easiest way to use this crate is with the default configuration. See `Default`
+//! implementation for the default configuration.
+//!
 //! ```rust
 //! use argon2_creds::Config;
 //!
 //! fn main() {
-//! let username = "iamBatman";
-//! let password = "ironmansucks";
-//! let email = "iambatman@wayne.org";
+//!     let config = Config::default();
 //!
-//! let config = Config::default();
-//! let hash = config.password(password).unwrap();
-//!    config.email(Some("batman@we.net")).unwrap();
-//!    let username = config.username("Realaravinth").unwrap();
-//!    let hash = config.password(password).unwrap();
-//!    assert_eq!(username, "realaravinth");
-//!    assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+//!     let password = "ironmansucks";
+//!     let hash = config.password(password).unwrap();
 //!
+//!     // email validation
+//!     config.email(Some("batman@we.net")).unwrap();
+//!     
+//!     // process username
+//!     let username = config.username("Realaravinth").unwrap(); // process username
+//!     
+//!     // generate hash
+//!     let hash = config.password(password).unwrap();
+//!
+//!     assert_eq!(username, "realaravinth");
+//!     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
 //! }
 //! ```
+//!
+//! 2. To gain fine-grained control over how credentials are managed, consider using
+//!    [ConfigBuilder]:
+//!
+//!```rust
+//! use argon2_creds::{ConfigBuilder, Config};
+//!
+//! fn main() {
+//!     let config = ConfigBuilder::default()
+//!         .salt_length(32)
+//!         .username_case_mapped(false)
+//!         .profanity(true)
+//!         .blacklist(false)
+//!         .argon2(argon2::Config::default())
+//!         .build()
+//!         .unwrap();
+//!
+//!     let password = "ironmansucks";
+//!     let hash = config.password(password).unwrap();
+//!
+//!     // email validation
+//!     config.email(Some("batman@we.net")).unwrap();
+//!     
+//!     // process username
+//!     let username = config.username("Realaravinth").unwrap(); // process username
+//!     
+//!     // generate hash
+//!     let hash = config.password(password).unwrap();
+//!
+//!     assert_eq!(username, "realaravinth");
+//!     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+//! }
+//!```
 //!
 //! ## Documentation & Community Resources
 //!
@@ -32,9 +72,7 @@
 //!
 //! * [Config]: This struct is the entry point to `argon2_creds`
 //!
-//! * [User]: This struct represents a fully processed credentials
-//!
-//! * [Error]: This module provides essential types for errors that can occour during
+//! * [CredsError]: This module provides essential types for errors that can occour during
 //! credential processing
 //!
 //! ## Features
@@ -52,5 +90,5 @@ pub mod config;
 pub mod errors;
 mod filters;
 
-pub use crate::config::Config;
+pub use crate::config::{Config, ConfigBuilder};
 pub use crate::errors::{CredsError, CredsResult};

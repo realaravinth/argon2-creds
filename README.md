@@ -6,6 +6,7 @@
   </p>
   <p>
 
+[![Documentation](https://img.shields.io/badge/docs-master-blue)](https://realaravinth.github.io/argon2-creds/argon2_creds/index.html)
 ![CI (Linux)](<https://github.com/realaravinth/argon2-creds/workflows/CI%20(Linux)/badge.svg>)
 [![dependency status](https://deps.rs/repo/github/realaravinth/argon2-creds/status.svg)](https://deps.rs/repo/github/realaravinth/argon2-creds)
 <br />
