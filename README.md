@@ -1,10 +1,8 @@
 <div align="center">
   <h1>Argon2-Creds</h1>
   <p>
-    <strong>Argon2-Creds provides a convenient abstractions for managing
-	credentials</strong>
+    <strong>Argon2-Creds - convenient abstractions for managing credentials</strong>
   </p>
-  <p>
 
 [![Documentation](https://img.shields.io/badge/docs-master-blue)](https://realaravinth.github.io/argon2-creds/argon2_creds/index.html)
 ![CI (Linux)](<https://github.com/realaravinth/argon2-creds/workflows/CI%20(Linux)/badge.svg>)
@@ -22,3 +20,72 @@
 [Blacklist](https://github.com/shuttlecraft/The-Big-Username-Blacklist)
 - [x] Profanity filter
 - [x] Email validation(Regex validation not verification)
+
+## Usage:
+
+Add this to your `Cargo.toml`:
+
+```toml
+argon2-creds = { version = "0.1", git = "https://github.com/realaravinth/argon2-creds" }
+```
+
+## Examples:
+
+1. The easiest way to use this crate is with the default configuration. See `Default`
+ implementation for the default configuration.
+
+ ```rust
+ use argon2_creds::Config;
+
+ fn main() {
+     let config = Config::default();
+
+     let password = "ironmansucks";
+     let hash = config.password(password).unwrap();
+
+     // email validation
+     config.email(Some("batman@we.net")).unwrap();
+     
+     // process username
+     let username = config.username("Realaravinth").unwrap(); // process username
+     
+     // generate hash
+     let hash = config.password(password).unwrap();
+
+     assert_eq!(username, "realaravinth");
+     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+ }
+ ```
+
+2. To gain fine-grained control over how credentials are managed, consider using
+    [ConfigBuilder]:
+
+```rust
+ use argon2_creds::{ConfigBuilder, Config};
+
+ fn main() {
+     let config = ConfigBuilder::default()
+         .salt_length(32)
+         .username_case_mapped(false)
+         .profanity(true)
+         .blacklist(false)
+         .argon2(argon2::Config::default())
+         .build()
+         .unwrap();
+
+     let password = "ironmansucks";
+     let hash = config.password(password).unwrap();
+
+     // email validation
+     config.email(Some("batman@we.net")).unwrap();
+     
+     // process username
+     let username = config.username("Realaravinth").unwrap(); // process username
+     
+     // generate hash
+     let hash = config.password(password).unwrap();
+
+     assert_eq!(username, "realaravinth");
+     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+ }
+```
