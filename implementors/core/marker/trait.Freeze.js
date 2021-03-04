@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["argon2_creds"] = [{"text":"impl Freeze for Config","synthetic":true,"types":[]},{"text":"impl Freeze for ConfigBuilder","synthetic":true,"types":[]},{"text":"impl Freeze for CredsError","synthetic":true,"types":[]}];
+implementors["argon2_creds"] = [{"text":"impl Freeze for Config","synthetic":true,"types":[]},{"text":"impl Freeze for ConfigBuilder","synthetic":true,"types":[]},{"text":"impl Freeze for PasswordPolicy","synthetic":true,"types":[]},{"text":"impl Freeze for PasswordPolicyBuilder","synthetic":true,"types":[]},{"text":"impl Freeze for CredsError","synthetic":true,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

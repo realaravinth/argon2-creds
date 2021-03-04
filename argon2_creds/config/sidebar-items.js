@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Config",""],["ConfigBuilder","Builder for `Config`."]]});
+initSidebarItems({"struct":[["Config","Credential management configuration"],["ConfigBuilder","Builder for `Config`."],["PasswordPolicy",""],["PasswordPolicyBuilder","Builder for `PasswordPolicy`."]]});

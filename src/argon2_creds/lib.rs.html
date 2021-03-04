@@ -94,7 +94,6 @@
 <span id="91">91</span>
 <span id="92">92</span>
 <span id="93">93</span>
-<span id="94">94</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Argon2-Creds provides abstractions over credential management and cuts down on boilerplate code</span>
 <span class="doccomment">//! required to implement authenticatin</span>
@@ -131,15 +130,14 @@
 <span class="doccomment">//!    [ConfigBuilder]:</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//!```rust</span>
-<span class="doccomment">//! use argon2_creds::{ConfigBuilder, Config};</span>
+<span class="doccomment">//! use argon2_creds::{ConfigBuilder, PasswordPolicy, Config};</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! fn main() {</span>
 <span class="doccomment">//!     let config = ConfigBuilder::default()</span>
-<span class="doccomment">//!         .salt_length(32)</span>
 <span class="doccomment">//!         .username_case_mapped(false)</span>
 <span class="doccomment">//!         .profanity(true)</span>
 <span class="doccomment">//!         .blacklist(false)</span>
-<span class="doccomment">//!         .argon2(argon2::Config::default())</span>
+<span class="doccomment">//!         .password_policy(PasswordPolicy::default())</span>
 <span class="doccomment">//!         .build()</span>
 <span class="doccomment">//!         .unwrap();</span>
 <span class="doccomment">//!</span>
@@ -188,7 +186,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">errors</span>;
 <span class="kw">mod</span> <span class="ident">filters</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">ConfigBuilder</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">ConfigBuilder</span>, <span class="ident">PasswordPolicy</span>, <span class="ident">PasswordPolicyBuilder</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">errors</span>::{<span class="ident">CredsError</span>, <span class="ident">CredsResult</span>};
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "argon2_creds";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
