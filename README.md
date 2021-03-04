@@ -35,57 +35,61 @@ argon2-creds = { version = "0.1", git = "https://github.com/realaravinth/argon2-
  implementation for the default configuration.
 
  ```rust
- use argon2_creds::Config;
+use argon2_creds::Config;
 
- fn main() {
-     let config = Config::default();
+fn main() {
+    let config = Config::default();
 
-     let password = "ironmansucks";
-     let hash = config.password(password).unwrap();
+    let password = "ironmansucks";
 
-     // email validation
-     config.email(Some("batman@we.net")).unwrap();
-     
-     // process username
-     let username = config.username("Realaravinth").unwrap(); // process username
-     
-     // generate hash
-     let hash = config.password(password).unwrap();
+    // email validation
+    config.email(Some("batman@we.net")).unwrap();
 
-     assert_eq!(username, "realaravinth");
-     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
- }
- ```
+    // process username
+    let username = config.username("Realaravinth").unwrap(); // process username
+
+    // generate hash
+    let hash = config.password(password).unwrap();
+
+    assert_eq!(username, "realaravinth");
+    assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+}
+```
 
 2. To gain fine-grained control over how credentials are managed, consider using
     [ConfigBuilder]:
 
 ```rust
- use argon2_creds::{ConfigBuilder, Config};
+use argon2_creds::{Config, ConfigBuilder, PasswordPolicyBuilder};
 
- fn main() {
-     let config = ConfigBuilder::default()
-         .salt_length(32)
-         .username_case_mapped(false)
-         .profanity(true)
-         .blacklist(false)
-         .argon2(argon2::Config::default())
-         .build()
-         .unwrap();
+fn main() {
+    let config = ConfigBuilder::default()
+        .username_case_mapped(false)
+        .profanity(true)
+        .blacklist(false)
+        .password_policy(
+            PasswordPolicyBuilder::default()
+                .min(12)
+                .max(80)
+                .build()
+                .unwrap(),
+        )
+        .build()
+        .unwrap();
 
-     let password = "ironmansucks";
-     let hash = config.password(password).unwrap();
+    let password = "ironmansucks";
+    let hash = config.password(password).unwrap();
 
-     // email validation
-     config.email(Some("batman@we.net")).unwrap();
-     
-     // process username
-     let username = config.username("Realaravinth").unwrap(); // process username
-     
-     // generate hash
-     let hash = config.password(password).unwrap();
+    // email validation
+    config.email(Some("batman@we.net")).unwrap();
 
-     assert_eq!(username, "realaravinth");
-     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
- }
+    // process username
+    let username = config.username("Realaravinth").unwrap(); // process username
+
+    // generate hash
+    let hash = config.password(password).unwrap();
+
+    assert_eq!(username, "realaravinth");
+    assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+}
 ```

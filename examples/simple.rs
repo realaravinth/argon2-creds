@@ -1,5 +1,6 @@
-// The easiest way to use this crate is with the default configuration. See `Default`
-//  implementation for the default configuration.
+/* The easiest way to use this crate is with the default configuration.
+ * See `Default` implementation for the default configuration.
+ */
 
 use argon2_creds::Config;
 

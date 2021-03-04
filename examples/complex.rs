@@ -1,4 +1,6 @@
-//To gain fine-grained control over how credentials are managed, consider using ConfigBuilder:
+/* To gain fine-grained control over how credentials are managed,
+ * consider using ConfigBuilder:
+ */
 
 use argon2_creds::{Config, ConfigBuilder, PasswordPolicyBuilder};
 
