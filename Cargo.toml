@@ -1,6 +1,6 @@
 [package]
 name = "argon2-creds"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["realaravinth <realaravinth@batsense.net>"]
 description = "Convenient abstractions for all things credentials"
 keywords = ["credentials", "password"]
