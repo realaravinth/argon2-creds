@@ -33,15 +33,14 @@
 //!    [ConfigBuilder]:
 //!
 //!```rust
-//! use argon2_creds::{ConfigBuilder, Config};
+//! use argon2_creds::{ConfigBuilder, PasswordPolicy, Config};
 //!
 //! fn main() {
 //!     let config = ConfigBuilder::default()
-//!         .salt_length(32)
 //!         .username_case_mapped(false)
 //!         .profanity(true)
 //!         .blacklist(false)
-//!         .argon2(argon2::Config::default())
+//!         .password_policy(PasswordPolicy::default())
 //!         .build()
 //!         .unwrap();
 //!
@@ -90,5 +89,5 @@ pub mod config;
 pub mod errors;
 mod filters;
 
-pub use crate::config::{Config, ConfigBuilder};
+pub use crate::config::{Config, ConfigBuilder, PasswordPolicy, PasswordPolicyBuilder};
 pub use crate::errors::{CredsError, CredsResult};

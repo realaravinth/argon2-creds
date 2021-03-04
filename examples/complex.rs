@@ -1,14 +1,19 @@
 //To gain fine-grained control over how credentials are managed, consider using ConfigBuilder:
 
-use argon2_creds::{Config, ConfigBuilder};
+use argon2_creds::{Config, ConfigBuilder, PasswordPolicyBuilder};
 
 fn main() {
     let config = ConfigBuilder::default()
-        .salt_length(32)
         .username_case_mapped(false)
         .profanity(true)
         .blacklist(false)
-        .argon2(argon2::Config::default())
+        .password_policy(
+            PasswordPolicyBuilder::default()
+                .min(12)
+                .max(80)
+                .build()
+                .unwrap(),
+        )
         .build()
         .unwrap();
 

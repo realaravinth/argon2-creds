@@ -5,13 +5,54 @@ use validator_derive::Validate;
 use crate::errors::*;
 use crate::filters::{beep, filter, forbidden};
 
+/// Credential management configuration
 #[derive(Clone, Builder)]
 pub struct Config {
+    /// activates profanity filter. Default `false`
+    #[builder(default = "false")]
     profanity: bool,
+    /// activates blacklist filter. Default `true`
+    #[builder(default = "true")]
     blacklist: bool,
+    /// activates username_case_mapped filter. Default `true`
+    #[builder(default = "true")]
     username_case_mapped: bool,
-    salt_length: usize,
+    /// activates profanity filter. Default `false`
+    #[builder(default = "PasswordPolicyBuilder::default().build().unwrap()")]
+    password_policy: PasswordPolicy,
+}
+
+impl PasswordPolicyBuilder {
+    fn validate(&self) -> Result<(), String> {
+        if self.min > self.max {
+            Err("Configuration error: Password max length shorter than min length".to_string())
+        } else {
+            Ok(())
+        }
+    }
+}
+
+#[derive(Clone, Builder)]
+#[builder(build_fn(validate = "Self::validate"))]
+pub struct PasswordPolicy {
+    /// See [argon2 config][argon2::Config]
+    #[builder(default = "argon2::Config::default()")]
     argon2: argon2::Config<'static>,
+    /// minium password length
+    #[builder(default = "8")]
+    min: usize,
+    /// maximum password length(to protect against DoS attacks)
+    #[builder(default = "64")]
+    max: usize,
+    /// salt length in password hashing
+    #[builder(default = "32")]
+    salt_length: usize,
+}
+
+impl Default for PasswordPolicy {
+    fn default() -> Self {
+        PasswordPolicyBuilder::default().build().unwrap()
+    }
 }
 
 #[derive(Validate)]
@@ -22,23 +63,12 @@ struct Email {
 
 impl Default for Config {
     fn default() -> Self {
-        Config {
-            /// profanity filter
-            profanity: false,
-            /// blacklist filter
-            blacklist: true,
-            /// UsernameCaseMapped filter
-            username_case_mapped: true,
-            /// salt length
-            salt_length: 32,
-            /// argon2 configuration, see argon2::Processor for more information
-            argon2: argon2::Config::default(),
-        }
+        ConfigBuilder::default().build().unwrap()
     }
 }
 
 impl Config {
-    /// process username
+    /// Mormalises, converts to lowercase and applies filters to the username
     pub fn username(&self, username: &str) -> CredsResult<String> {
         use ammonia::clean;
         use unicode_normalization::UnicodeNormalization;
@@ -53,7 +83,7 @@ impl Config {
         Ok(clean_username)
     }
 
-    /// process email
+    /// Checks if input is an email
     pub fn email(&self, email: Option<&str>) -> CredsResult<()> {
         if let Some(email) = email {
             let email = Email {
@@ -77,27 +107,37 @@ impl Config {
         Ok(())
     }
 
-    /// generate hash for password
+    /// Generate hash for passsword
     pub fn password(&self, password: &str) -> CredsResult<String> {
         use argon2::hash_encoded;
         use rand::distributions::Alphanumeric;
         use rand::{thread_rng, Rng};
 
+        let length = password.len();
+
+        if self.password_policy.min > length {
+            return Err(CredsError::PasswordTooShort);
+        }
+
+        if self.password_policy.max < length {
+            return Err(CredsError::PasswordTooLong);
+        }
+
         let mut rng = thread_rng();
         let salt: String = std::iter::repeat(())
             .map(|()| rng.sample(Alphanumeric))
             .map(char::from)
-            .take(self.salt_length)
+            .take(self.password_policy.salt_length)
             .collect();
 
         Ok(hash_encoded(
             password.as_bytes(),
             salt.as_bytes(),
-            &self.argon2,
+            &self.password_policy.argon2,
         )?)
     }
 
-    /// verify password against hash
+    /// Verify password against hash
     pub fn verify(hash: &str, password: &str) -> CredsResult<bool> {
         let status = argon2::verify_encoded(hash, password.as_bytes())?;
         Ok(status)
@@ -114,33 +154,28 @@ mod tests {
         assert!(!config.profanity);
         assert!(config.blacklist);
         assert!(config.username_case_mapped);
-        assert_eq!(config.salt_length, 32);
-
-        let new_length = 50;
+        assert_eq!(config.password_policy.salt_length, 32);
 
         let config = ConfigBuilder::default()
-            .salt_length(new_length)
             .username_case_mapped(false)
             .profanity(true)
             .blacklist(false)
-            .argon2(argon2::Config::default())
+            .password_policy(PasswordPolicy::default())
             .build()
             .unwrap();
 
         assert!(config.profanity);
         assert!(!config.blacklist);
         assert!(!config.username_case_mapped);
-        assert_eq!(config.salt_length, new_length);
     }
 
     #[test]
     fn creds_email_err() {
         let config = ConfigBuilder::default()
-            .salt_length(50)
             .username_case_mapped(false)
             .profanity(true)
             .blacklist(false)
-            .argon2(argon2::Config::default())
+            .password_policy(PasswordPolicy::default())
             .build()
             .unwrap();
 
@@ -167,11 +202,10 @@ mod tests {
     #[test]
     fn utils_create_new_profane_organisation() {
         let config = ConfigBuilder::default()
-            .salt_length(50)
             .username_case_mapped(false)
             .profanity(true)
             .blacklist(false)
-            .argon2(argon2::Config::default())
+            .password_policy(PasswordPolicy::default())
             .build()
             .unwrap();
 
@@ -186,5 +220,29 @@ mod tests {
         let forbidden_err = config.username("htaccessasnc");
 
         assert_eq!(forbidden_err, Err(CredsError::BlacklistError));
+    }
+
+    #[test]
+    fn password_length_check() {
+        let min_max_error = PasswordPolicyBuilder::default().min(50).max(10).build();
+
+        assert!(min_max_error.is_err());
+
+        let config = ConfigBuilder::default()
+            .password_policy(
+                PasswordPolicyBuilder::default()
+                    .min(5)
+                    .max(10)
+                    .build()
+                    .unwrap(),
+            )
+            .build()
+            .unwrap();
+
+        let too_short_err = config.password("a");
+        let too_long_err = config.password("asdfasdfasdf");
+
+        assert_eq!(too_short_err, Err(CredsError::PasswordTooShort));
+        assert_eq!(too_long_err, Err(CredsError::PasswordTooLong));
     }
 }

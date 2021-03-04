@@ -26,6 +26,14 @@ pub enum CredsError {
     #[display(fmt = "The value passed in not an email")]
     NotAnEmail,
 
+    /// password too short
+    #[display(fmt = "Password too short")]
+    PasswordTooShort,
+
+    /// password too long
+    #[display(fmt = "Password too long")]
+    PasswordTooLong,
+
     /// Errors from argon2
     #[display(fmt = "{}", _0)]
     Argon2Error(argon2::Error),
