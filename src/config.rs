@@ -6,12 +6,12 @@ use crate::errors::*;
 use crate::filters::{beep, filter, forbidden};
 
 #[derive(Clone, Builder)]
-pub struct Config<'a> {
+pub struct Config {
     profanity: bool,
     blacklist: bool,
     username_case_mapped: bool,
     salt_length: usize,
-    argon2: argon2::Config<'a>,
+    argon2: argon2::Config<'static>,
 }
 
 #[derive(Validate)]
@@ -20,7 +20,7 @@ struct Email {
     pub email: String,
 }
 
-impl<'a> Default for Config<'a> {
+impl Default for Config {
     fn default() -> Self {
         Config {
             /// profanity filter
@@ -37,9 +37,9 @@ impl<'a> Default for Config<'a> {
     }
 }
 
-impl<'a> Config<'a> {
+impl Config {
     /// process username
-    pub fn username(&'a self, username: &str) -> CredsResult<String> {
+    pub fn username(&self, username: &str) -> CredsResult<String> {
         use ammonia::clean;
         use unicode_normalization::UnicodeNormalization;
 
@@ -54,7 +54,7 @@ impl<'a> Config<'a> {
     }
 
     /// process email
-    pub fn email(&self, email: Option<&'a str>) -> CredsResult<()> {
+    pub fn email(&self, email: Option<&str>) -> CredsResult<()> {
         if let Some(email) = email {
             let email = Email {
                 email: email.trim().to_owned(),
@@ -64,7 +64,7 @@ impl<'a> Config<'a> {
         Ok(())
     }
 
-    fn validate_username(&self, username: &'a str) -> CredsResult<()> {
+    fn validate_username(&self, username: &str) -> CredsResult<()> {
         if self.username_case_mapped {
             filter(&username)?;
         }
@@ -78,7 +78,7 @@ impl<'a> Config<'a> {
     }
 
     /// generate hash for password
-    pub fn password(&'a self, password: &str) -> CredsResult<String> {
+    pub fn password(&self, password: &str) -> CredsResult<String> {
         use argon2::hash_encoded;
         use rand::distributions::Alphanumeric;
         use rand::{thread_rng, Rng};
