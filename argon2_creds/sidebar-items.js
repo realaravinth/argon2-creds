@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["config",""],["errors",""]]});
+initSidebarItems({"mod":[["config","Credential processor and configuration"],["errors","Result and error datatypes"]]});
