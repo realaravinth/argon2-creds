@@ -64,7 +64,6 @@
 //! ## Documentation & Community Resources
 //!
 //! In addition to this API documentation, other resources are available:
-//!
 //! * [Examples](https://github.com/realaravinth/argon2-creds/)
 //!
 //! To get started navigating the API docs, you may consider looking at the following pages first:

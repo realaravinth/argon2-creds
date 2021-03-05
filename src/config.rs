@@ -1,3 +1,4 @@
+//! Credential processor and configuration
 use derive_builder::Builder;
 use validator::Validate;
 use validator_derive::Validate;

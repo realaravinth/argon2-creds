@@ -1,3 +1,4 @@
+//! Result and error datatypes
 use std::convert::From;
 
 use derive_more::{Display, Error};
