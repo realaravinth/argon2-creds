@@ -26,7 +26,7 @@
 Add this to your `Cargo.toml`:
 
 ```toml
-argon2-creds = { version = "0.1", git = "https://github.com/realaravinth/argon2-creds" }
+argon2-creds = { version = "0.2", git = "https://github.com/realaravinth/argon2-creds" }
 ```
 
 ## Examples:
