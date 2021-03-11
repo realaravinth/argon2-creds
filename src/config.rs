@@ -1,7 +1,6 @@
 //! Credential processor and configuration
 use derive_builder::Builder;
 use validator::Validate;
-use validator_derive::Validate;
 
 use crate::errors::*;
 use crate::filters::{beep, filter, forbidden};
