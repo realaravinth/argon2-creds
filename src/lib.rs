@@ -16,7 +16,7 @@
 //!     let hash = config.password(password).unwrap();
 //!
 //!     // email validation
-//!     config.email(Some("batman@we.net")).unwrap();
+//!     config.email("batman@we.net").unwrap();
 //!     
 //!     // process username
 //!     let username = config.username("Realaravinth").unwrap(); // process username
@@ -48,7 +48,7 @@
 //!     let hash = config.password(password).unwrap();
 //!
 //!     // email validation
-//!     config.email(Some("batman@we.net")).unwrap();
+//!     config.email("batman@we.net").unwrap();
 //!     
 //!     // process username
 //!     let username = config.username("Realaravinth").unwrap(); // process username

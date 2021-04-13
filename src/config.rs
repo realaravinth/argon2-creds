@@ -56,9 +56,9 @@ impl Default for PasswordPolicy {
 }
 
 #[derive(Validate)]
-struct Email {
+struct Email<'a> {
     #[validate(email)]
-    pub email: String,
+    pub email: &'a str,
 }
 
 impl Default for Config {
@@ -84,14 +84,11 @@ impl Config {
     }
 
     /// Checks if input is an email
-    pub fn email(&self, email: Option<&str>) -> CredsResult<()> {
-        if let Some(email) = email {
-            let email = Email {
-                email: email.trim().to_owned(),
-            };
-            email.validate()?;
-        }
-        Ok(())
+    pub fn email(&self, email: &str) -> CredsResult<()> {
+        let email = Email {
+            email: email.trim(),
+        };
+        Ok(email.validate()?)
     }
 
     fn validate_username(&self, username: &str) -> CredsResult<()> {
@@ -179,10 +176,7 @@ mod tests {
             .build()
             .unwrap();
 
-        assert_eq!(
-            config.email(Some("sdfasdf".into())),
-            Err(CredsError::NotAnEmail)
-        );
+        assert_eq!(config.email("sdfasdf".into()), Err(CredsError::NotAnEmail));
     }
 
     #[test]
@@ -190,7 +184,7 @@ mod tests {
         let password = "somepassword";
         let config = Config::default();
 
-        config.email(Some("batman@we.net")).unwrap();
+        config.email("batman@we.net").unwrap();
         let username = config.username("Realaravinth").unwrap();
         let hash = config.password(password).unwrap();
 
