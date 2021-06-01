@@ -211,7 +211,7 @@ mod tests {
     #[test]
     fn utils_create_new_forbidden_organisation() {
         let config = Config::default();
-        let forbidden_err = config.username("htaccessasnc");
+        let forbidden_err = config.username(".htaccess");
 
         assert_eq!(forbidden_err, Err(CredsError::BlacklistError));
     }

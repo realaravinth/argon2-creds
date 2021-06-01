@@ -4,6 +4,9 @@
 
 -`Config::email` now takes a `&str` instead of `Option<&str>`
 
+- Blacklist and profanity matches against exact strings **only**. This
+  means, `.htaccess` is illegal while `.htaccessme` is legal.
+
 ## 0.2.0
 
 ### Added
