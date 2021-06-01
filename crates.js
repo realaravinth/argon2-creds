@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["argon2_creds"];
