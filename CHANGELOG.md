@@ -1,5 +1,9 @@
 ## 0.2.1
 
+### Added
+
+- `Config::init`: explicit call to init lazy-init filters.
+
 ### Changed:
 
 -`Config::email` now takes a `&str` instead of `Option<&str>`
