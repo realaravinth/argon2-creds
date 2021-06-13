@@ -15,9 +15,9 @@
 * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-mod blacklist;
-mod profainity;
-mod user_case_mapped;
+pub(crate) mod blacklist;
+pub(crate) mod profainity;
+pub(crate) mod user_case_mapped;
 
 pub use blacklist::forbidden;
 pub use profainity::beep;

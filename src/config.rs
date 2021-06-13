@@ -1,9 +1,13 @@
 //! Credential processor and configuration
 use derive_builder::Builder;
+use lazy_static::initialize;
 use validator::Validate;
 
 use crate::errors::*;
 use crate::filters::{beep, filter, forbidden};
+use crate::filters::{
+    blacklist::RE_BLACKLIST, profainity::RE_PROFAINITY, user_case_mapped::RE_USERNAME_CASE_MAPPED,
+};
 
 /// Credential management configuration
 #[derive(Clone, Builder)]
@@ -139,6 +143,23 @@ impl Config {
         let status = argon2::verify_encoded(hash, password.as_bytes())?;
         Ok(status)
     }
+
+    /// Initialize filters accoding to configuration.
+    ///
+    /// Filters are lazy initialized so there's a slight delay during the very first use of
+    /// filter. By calling this method during the early stages of program execution,
+    /// that delay can be avoided.
+    pub fn init(&self) {
+        if self.username_case_mapped {
+            initialize(&RE_USERNAME_CASE_MAPPED);
+        }
+        if self.blacklist {
+            initialize(&RE_BLACKLIST);
+        }
+        if self.profanity {
+            initialize(&RE_PROFAINITY);
+        }
+    }
 }
 
 #[cfg(test)]
@@ -175,14 +196,16 @@ mod tests {
             .password_policy(PasswordPolicy::default())
             .build()
             .unwrap();
+        config.init();
 
-        assert_eq!(config.email("sdfasdf".into()), Err(CredsError::NotAnEmail));
+        assert_eq!(config.email("sdfasdf"), Err(CredsError::NotAnEmail));
     }
 
     #[test]
     fn utils_create_new_organisation() {
         let password = "somepassword";
         let config = Config::default();
+        config.init();
 
         config.email("batman@we.net").unwrap();
         let username = config.username("Realaravinth").unwrap();
@@ -202,6 +225,7 @@ mod tests {
             .password_policy(PasswordPolicy::default())
             .build()
             .unwrap();
+        config.init();
 
         let username_err = config.username("fuck");
 
@@ -211,6 +235,7 @@ mod tests {
     #[test]
     fn utils_create_new_forbidden_organisation() {
         let config = Config::default();
+        config.init();
         let forbidden_err = config.username(".htaccess");
 
         assert_eq!(forbidden_err, Err(CredsError::BlacklistError));
@@ -232,6 +257,7 @@ mod tests {
             )
             .build()
             .unwrap();
+        config.init();
 
         let too_short_err = config.password("a");
         let too_long_err = config.password("asdfasdfasdf");

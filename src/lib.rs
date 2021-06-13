@@ -7,9 +7,7 @@
 //! implementation for the default configuration.
 //!
 //! ```rust
-//! use argon2_creds::Config;
-//!
-//! fn main() {
+//!     use argon2_creds::Config;
 //!     let config = Config::default();
 //!
 //!     let password = "ironmansucks";
@@ -26,16 +24,14 @@
 //!
 //!     assert_eq!(username, "realaravinth");
 //!     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
-//! }
 //! ```
 //!
 //! 2. To gain fine-grained control over how credentials are managed, consider using
 //!    [ConfigBuilder]:
 //!
 //!```rust
-//! use argon2_creds::{ConfigBuilder, PasswordPolicy, Config};
+//!     use argon2_creds::{ConfigBuilder, PasswordPolicy, Config};
 //!
-//! fn main() {
 //!     let config = ConfigBuilder::default()
 //!         .username_case_mapped(false)
 //!         .profanity(true)
@@ -58,7 +54,6 @@
 //!
 //!     assert_eq!(username, "realaravinth");
 //!     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
-//! }
 //!```
 //!
 //! ## Documentation & Community Resources
