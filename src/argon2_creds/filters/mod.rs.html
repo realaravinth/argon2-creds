@@ -43,9 +43,9 @@
 * along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 */</span>
 
-<span class="kw">mod</span> <span class="ident">blacklist</span>;
-<span class="kw">mod</span> <span class="ident">profainity</span>;
-<span class="kw">mod</span> <span class="ident">user_case_mapped</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">blacklist</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">profainity</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">user_case_mapped</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">blacklist</span>::<span class="ident">forbidden</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">profainity</span>::<span class="ident">beep</span>;
