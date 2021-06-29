@@ -83,6 +83,7 @@ impl Config {
             .collect::<String>()
             .trim()
             .to_owned();
+
         self.validate_username(&clean_username)?;
         Ok(clean_username)
     }
@@ -217,6 +218,22 @@ mod tests {
     }
 
     #[test]
+    fn username_case_mapped_org() {
+        let config = ConfigBuilder::default()
+            .username_case_mapped(true)
+            .profanity(true)
+            .blacklist(false)
+            .password_policy(PasswordPolicy::default())
+            .build()
+            .unwrap();
+        config.init();
+
+        let username_err = config.username("a@test.com");
+
+        assert_eq!(username_err, Err(CredsError::UsernameCaseMappedError));
+    }
+
+    #[test]
     fn utils_create_new_profane_organisation() {
         let config = ConfigBuilder::default()
             .username_case_mapped(false)
@@ -236,7 +253,7 @@ mod tests {
     fn utils_create_new_forbidden_organisation() {
         let config = Config::default();
         config.init();
-        let forbidden_err = config.username(".htaccess");
+        let forbidden_err = config.username("webmaster");
 
         assert_eq!(forbidden_err, Err(CredsError::BlacklistError));
     }
