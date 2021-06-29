@@ -23,7 +23,9 @@ mod tests {
     fn test_usercase_mapped() {
         let legal = "\u{0065}";
         let illegal = "\u{0000}";
+        let illegal2 = "@";
         assert_eq!(filter(legal), Ok(()));
         assert_eq!(filter(illegal), Err(CredsError::UsernameCaseMappedError));
+        assert_eq!(filter(illegal2), Err(CredsError::UsernameCaseMappedError));
     }
 }
