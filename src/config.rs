@@ -42,7 +42,7 @@ pub struct PasswordPolicy {
     /// See [argon2 config][argon2::Config]
     #[builder(default = "argon2::Config::default()")]
     argon2: argon2::Config<'static>,
-    /// minium password length
+    /// minimum password length
     #[builder(default = "8")]
     min: usize,
     /// maximum password length(to protect against DoS attacks)
@@ -72,7 +72,7 @@ impl Default for Config {
 }
 
 impl Config {
-    /// Mormalises, converts to lowercase and applies filters to the username
+    /// Normalises, converts to lowercase and applies filters to the username
     pub fn username(&self, username: &str) -> CredsResult<String> {
         use ammonia::clean;
         use unicode_normalization::UnicodeNormalization;
@@ -145,7 +145,7 @@ impl Config {
         Ok(status)
     }
 
-    /// Initialize filters accoding to configuration.
+    /// Initialize filters according to configuration.
     ///
     /// Filters are lazy initialized so there's a slight delay during the very first use of
     /// filter. By calling this method during the early stages of program execution,
@@ -214,7 +214,7 @@ mod tests {
 
         assert_eq!(username, "realaravinth");
 
-        assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+        assert!(Config::verify(&hash, password).unwrap(), "verify hashing");
     }
 
     #[test]

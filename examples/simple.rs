@@ -19,5 +19,5 @@ fn main() {
     let hash = config.password(password).unwrap();
 
     assert_eq!(username, "realaravinth");
-    assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+    assert!(Config::verify(&hash, password).unwrap(), "verify hashing");
 }

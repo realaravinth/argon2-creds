@@ -23,7 +23,7 @@
 //!     let hash = config.password(password).unwrap();
 //!
 //!     assert_eq!(username, "realaravinth");
-//!     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+//!     assert!(Config::verify(&hash, password).unwrap(), "verify hashing");
 //! ```
 //!
 //! 2. To gain fine-grained control over how credentials are managed, consider using
@@ -53,7 +53,7 @@
 //!     let hash = config.password(password).unwrap();
 //!
 //!     assert_eq!(username, "realaravinth");
-//!     assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+//!     assert!(Config::verify(&hash, password).unwrap(), "verify hashing");
 //!```
 //!
 //! ## Documentation & Community Resources
@@ -65,7 +65,7 @@
 //!
 //! * [Config]: This struct is the entry point to `argon2_creds`
 //!
-//! * [CredsError]: This module provides essential types for errors that can occour during
+//! * [CredsError]: This module provides essential types for errors that can occur during
 //! credential processing
 //!
 //! ## Features
@@ -75,7 +75,7 @@
 //! * Keep-alive and slow requests handling
 //! * Profanity filter based off of
 //! [List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words)
-//! * Problamatic usernames filter based off of
+//! * Problematic usernames filter based off of
 //! [The-Big-Username-Blacklist](https://github.com/marteinn/The-Big-Username-Blacklist)
 //! * Email validation using [validator](https://crates.io/validator)
 

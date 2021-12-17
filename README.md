@@ -8,56 +8,57 @@
 ![CI (Linux)](<https://github.com/realaravinth/argon2-creds/workflows/CI%20(Linux)/badge.svg>)
 [![dependency status](https://deps.rs/repo/github/realaravinth/argon2-creds/status.svg)](https://deps.rs/repo/github/realaravinth/argon2-creds)
 <br />
-[![codecov](https://codecov.io/gh/realaravinth/argon2-creds/branch/master/graph/badge.svg)](https://codecov.io/gh/realaravinth/argon2-creds) 
+[![codecov](https://codecov.io/gh/realaravinth/argon2-creds/branch/master/graph/badge.svg)](https://codecov.io/gh/realaravinth/argon2-creds)
 
 </div>
 
 ## Features
-- [x] PRECIS Framework [UsernameCaseMapped](https://tools.ietf.org/html/rfc8265#page-7)
-- [x] Password hashing and validation using
-  [rust-argon2](https://crates.io/crates/rust-argon2)
-- [x] Filters for words that might cause ambiguity. See 
-[Blacklist](https://github.com/shuttlecraft/The-Big-Username-Blacklist)
-- [x] Profanity filter
-- [x] Email validation(Regex validation not verification)
+
+-   [x] PRECIS Framework [UsernameCaseMapped](https://tools.ietf.org/html/rfc8265#page-7)
+-   [x] Password hashing and validation using
+        [rust-argon2](https://crates.io/crates/rust-argon2)
+-   [x] Filters for words that might cause ambiguity. See
+        [Blacklist](https://github.com/shuttlecraft/The-Big-Username-Blacklist)
+-   [x] Profanity filter
+-   [x] Email validation(Regex validation not verification)
 
 ## Usage:
 
 Add this to your `Cargo.toml`:
 
 ```toml
-argon2-creds = { version = "0.2", git = "https://github.com/realaravinth/argon2-creds" }
+argon2-creds = "0.2"
 ```
 
 ## Examples:
 
 1. The easiest way to use this crate is with the default configuration. See `Default`
- implementation for the default configuration.
+   implementation for the default configuration.
 
- ```rust
+```rust
 use argon2_creds::Config;
 
 fn main() {
-    let config = Config::default();
+   let config = Config::default();
 
-    let password = "ironmansucks";
+   let password = "ironmansucks";
 
-    // email validation
-    config.email(Some("batman@we.net")).unwrap();
+   // email validation
+   config.email(Some("batman@we.net")).unwrap();
 
-    // process username
-    let username = config.username("Realaravinth").unwrap(); // process username
+   // process username
+   let username = config.username("Realaravinth").unwrap(); // process username
 
-    // generate hash
-    let hash = config.password(password).unwrap();
+   // generate hash
+   let hash = config.password(password).unwrap();
 
-    assert_eq!(username, "realaravinth");
-    assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+   assert_eq!(username, "realaravinth");
+   assert!(Config::verify(&hash, password).unwrap(), "verify hashing");
 }
 ```
 
 2. To gain fine-grained control over how credentials are managed, consider using
-    [ConfigBuilder]:
+   [ConfigBuilder]:
 
 ```rust
 use argon2_creds::{Config, ConfigBuilder, PasswordPolicyBuilder};
@@ -90,6 +91,6 @@ fn main() {
     let hash = config.password(password).unwrap();
 
     assert_eq!(username, "realaravinth");
-    assert!(Config::verify(&hash, password).unwrap(), "verify hahsing");
+    assert!(Config::verify(&hash, password).unwrap(), "verify hashing");
 }
 ```
