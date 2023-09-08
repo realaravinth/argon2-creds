@@ -18,7 +18,7 @@ path = "src/lib.rs"
 
 
 [dependencies]
-rust-argon2 = "1.0.0"
+rust-argon2 = "2.0.0"
 derive_more = "0.99.17"
 unicode-normalization = "0.1.19"
 ammonia = "3.1.3"
